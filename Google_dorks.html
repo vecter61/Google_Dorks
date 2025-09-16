@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dork Cheatsheet — Display</title>
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --muted:#9aa7be; --accent:#7dd3fc;
+      --accent-2:#60a5fa;
+    }
+    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Helvetica,Arial,sans-serif;background:linear-gradient(180deg,#061021 0%, #071427 100%);color:#e6eef8}
+    .wrap{max-width:980px;margin:36px auto;padding:28px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+    h1{margin:0 0 8px;font-size:20px}
+    p.lead{margin:0 0 18px;color:var(--muted);font-size:13px}
+    .notice{background:#2b1111;padding:14px;border-radius:8px;color:#ffd8d8;margin-bottom:18px;border:1px solid rgba(255,200,200,0.06)}
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    @media (max-width:720px){.grid{grid-template-columns:1fr}}
+    .card{background:var(--card);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
+    .card h3{margin:0 0 8px;font-size:14px}
+    .controls{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+    button{background:linear-gradient(180deg,var(--accent),var(--accent-2));border:none;color:#042644;padding:8px 10px;border-radius:8px;font-weight:600;cursor:pointer}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);padding:7px 10px;border-radius:8px}
+    pre{background:#020617;padding:12px;border-radius:8px;overflow:auto;color:#e6eef8;font-family:ui-monospace,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:13px;line-height:1.45;margin:0;border:1px solid rgba(255,255,255,0.02)}
+    .small{font-size:12px;color:var(--muted)}
+    .footer{margin-top:16px;display:flex;justify-content:space-between;gap:12px;align-items:center}
+    .tag{background:rgba(255,255,255,0.03);padding:6px 10px;border-radius:999px;font-size:12px;color:var(--muted)}
+    .copied{display:inline-block;margin-left:10px;color:#b7f5d3;font-weight:700}
+  </style>
+</head>
+<body>
+  <main class="wrap" role="main" aria-labelledby="title">
+    <header>
+      <h1 id="title">Dork Cheatsheet — Display</h1>
+      <p class="lead">This page only shows the dorks you provided, grouped by category. Use responsibly — for defensive, authorized research or remediation only.</p>
+    </header>
+
+    <section class="notice" role="note" aria-live="polite">
+      <strong>Ethics & Legal:</strong>
+      <div class="small" style="margin-top:6px">
+        The queries shown below can be used to find sensitive information (configuration files, backups, logs, database dumps). Only scan, probe, or investigate systems you own or for which you have explicit written permission. Unauthorized access or exploitation is illegal. If you're a site owner and find exposed data, secure it and notify affected parties.
+      </div>
+    </section>
+
+    <div class="grid" id="cards">
+      <!-- Card template repeated below -->
+      <div class="card">
+        <div class="controls">
+          <h3>Exposed Config Files</h3>
+          <div style="flex:1"></div>
+          <button onclick="copySection('cfg')">Copy</button>
+          <button class="btn-ghost" onclick="toggle('cfg')">Toggle</button>
+        </div>
+        <pre id="cfg" hidden>
+site:www.website_name.com filetype:env "DB_PASSWORD"
+site:www.website_name.com intitle:"index of" ".env"
+site:www.website_name.com "define('DB_USER'," + "define('DB_PASSWORD'," ext:txt
+site:www.website_name.com "db.username" + "db.password" ext:properties
+site:www.website_name.com intitle:"index of" "config.exs" | "dev.exs" | "test.exs" | "prod.secret.exs"
+site:www.website_name.com "spring.datasource.password=" + "spring.datasource.username=" ext:properties
+site:www.website_name.com "/** MySQL database password */" ext:txt | ext:cfg | ext:env | ext:ini
+site:www.website_name.com intitle:"index of" "db.ini"
+site:www.website_name.com intitle:"index of" "database.ini" OR "database.ini.old"
+site:www.website_name.com intitle:"index of" application.ini
+site:www.website_name.com intitle:"index of" "db.connection.js"
+site:www.website_name.com intitle:"index of" "config.neon" OR "config.local.neon"
+site:www.website_name.com "config.php.bak" intitle:"index of"
+site:www.website_name.com intitle:"database.php" inurl:"database.php" intext:"db_password"
+site:www.website_name.com "MYSQL_ROOT_PASSWORD:" ext:env OR ext:yml
+site:www.website_name.com "POSTGRES_PASSWORD=" ext:txt | ext:cfg | ext:env | ext:ini | ext:yml | ext:sql
+site:www.website_name.com "EMAIL_HOST_PASSWORD" ext:yml | ext:env | ext:txt | ext:log
+site:www.website_name.com allintext:"redis_password" ext:env
+site:www.website_name.com intext:"db_database" ext:env intext:"db_password"
+site:www.website_name.com "keystorePass=" ext:xml | ext:txt
+site:www.website_name.com "mailer_password:" + "mailer_host:" + "mailer_user:" + "secret:" ext:yml
+        </pre>
+      </div>
+
+      <div class="card">
+        <div class="controls">
+          <h3>Database Dumps / SQL Files</h3>
+          <div style="flex:1"></div>
+          <button onclick="copySection('sql')">Copy</button>
+          <button class="btn-ghost" onclick="toggle('sql')">Toggle</button>
+        </div>
+        <pre id="sql" hidden>
+site:www.website_name.com filetype:sql "password"
+site:www.website_name.com "insert into users" "VALUES" ext:sql | ext:txt | ext:log | ext:env
+site:www.website_name.com jdbc:mysql://localhost:3306/ + username + password ext:yml | ext:javascript
+site:www.website_name.com jdbc:postgresql://localhost: + username + password ext:yml | ext:java
+site:www.website_name.com jdbc:oracle://localhost: + username + password ext:yml | ext:java
+site:www.website_name.com intext:construct('mysql:host
+site:www.website_name.com ext:sql intext:"alter user" intext:"identified by"
+        </pre>
+      </div>
+
+      <div class="card">
+        <div class="controls">
+          <h3>Log Files</h3>
+          <div style="flex:1"></div>
+          <button onclick="copySection('logs')">Copy</button>
+          <button class="btn-ghost" onclick="toggle('logs')">Toggle</button>
+        </div>
+        <pre id="logs" hidden>
+site:www.website_name.com allintext:password filetype:log
+site:www.website_name.com intext:"username=" AND "password=" ext:log
+site:www.website_name.com filetype:log intext:password after:2015 intext:@gmail.com | @yahoo.com | @hotmail.com
+site:www.website_name.com ext:log password END_FILE
+site:www.website_name.com "'username' =>" + "'password' =>" ext:log
+site:www.website_name.com inurl:logs intext:GET https:// ext:txt intext:password intext:username
+site:www.website_name.com ext:txt intext:@yahoo.com intext:password
+        </pre>
+      </div>
+
+      <div class="card">
+        <div class="controls">
+          <h3>Backup Files</h3>
+          <div style="flex:1"></div>
+          <button onclick="copySection('bak')">Copy</button>
+          <button class="btn-ghost" onclick="toggle('bak')">Toggle</button>
+        </div>
+        <pre id="bak" hidden>
+site:www.website_name.com intitle:"index of" "backup" OR "config" filetype:bak
+site:www.website_name.com intitle:"index of" inurl:backup
+site:www.website_name.com intitle:"index of" "anaconda-ks.cfg" | "anaconda-ks-new.cfg"
+site:www.website_name.com "anaconda-ks.cfg" | "ks.cfg" ext:cfg
+site:www.website_name.com rootpw --iscrypted ext:cfg
+        </pre>
+      </div>
+
+      <div class="card">
+        <div class="controls">
+          <h3>Admin Paths & Login Pages</h3>
+          <div style="flex:1"></div>
+          <button onclick="copySection('admin')">Copy</button>
+          <button class="btn-ghost" onclick="toggle('admin')">Toggle</button>
+        </div>
+        <pre id="admin" hidden>
+site:www.website_name.com inurl:admin login
+site:www.website_name.com intitle:"login" "admin"
+site:www.website_name.com filetype:php inurl:"/admin/" intext:"password"
+site:www.website_name.com inurl:"/admin/login"
+site:www.website_name.com inurl:"/config/" filetype:php
+site:www.website_name.com filetype:js inurl:"/wp-content/"
+site:www.website_name.com filetype:json inurl:"/api/"
+site:www.website_name.com "admin_password" ext:txt | ext:log | ext:cfg
+site:www.website_name.com "cpanel username" "cpanel password" ext:txt
+site:www.website_name.com "password 7" ext:txt | ext:log | ext:cfg
+site:www.website_name.com intitle:"index of" "idx_config"
+site:www.website_name.com "Index of" "/yahoo_site_admin/credentials"
+site:www.website_name.com intext:"Index of /password"
+site:www.website_name.com intitle:"index of" "/master.passwd"
+site:www.website_name.com intitle:"index of " "*.passwords.txt"
+site:www.website_name.com intitle:"index of" "passwords.xlsx"
+site:www.website_name.com "index of" "password.ini"
+site:www.website_name.com filetype:txt "username" "password"
+        </pre>
+      </div>
+
+      <div class="card">
+        <div class="controls">
+          <h3>Other Sensitive Files</h3>
+          <div style="flex:1"></div>
+          <button onclick="copySection('other')">Copy</button>
+          <button class="btn-ghost" onclick="toggle('other')">Toggle</button>
+        </div>
+        <pre id="other" hidden>
+site:www.website_name.com ext:xls intext:@gmail.com intext:password
+site:www.website_name.com ext:csv intext:"password"
+site:www.website_name.com ext:cfg "g_password" | "sv_privatepassword" | "rcon_password"
+site:www.website_name.com "server.cfg" ext:cfg intext:"rcon_password"
+site:www.website_name.com "enable password" ext:cfg
+site:www.website_name.com "MasterUserPassword" ext:cfg OR ext:log OR ext:txt
+site:www.website_name.com "/etc/shadow root:$" ext:cfg OR ext:log OR ext:txt OR ext:sql
+site:www.website_name.com "admin password irreversible-cipher" ext:txt OR ext:log OR ext:cfg
+site:www.website_name.com "super password level 3 cipher" ext:txt OR ext:log OR ext:cfg
+site:www.website_name.com "d-i passwd/root-password-crypted password" ext:cfg
+site:www.website_name.com "configure account user encrypted" ext:cfg
+site:www.website_name.com "create account" admin ext:cfg
+site:www.website_name.com intitle:"Index of" dbconnect.inc
+site:www.website_name.com filetype:json intext:"api_key" OR intext:"access_token"
+        </pre>
+      </div>
+
+      <div class="card">
+        <div class="controls">
+          <h3>Off-site / Paste Leaks</h3>
+          <div style="flex:1"></div>
+          <button onclick="copySection('paste')">Copy</button>
+          <button class="btn-ghost" onclick="toggle('paste')">Toggle</button>
+        </div>
+        <pre id="paste" hidden>
+site:pastebin.com intext:admin.password www.website_name.com
+site:pastebin.com intext:www.website_name.com password
+site:github.com "BEGIN OPENSSH PRIVATE KEY" www.website_name.com
+        </pre>
+      </div>
+
+    </div>
+
+    <div class="footer">
+      <div class="tag">Rendered: Dork list (display-only)</div>
+      <div class="small">Tip: toggle each section to reveal its contents, then use the Copy button to place text into clipboard.</div>
+    </div>
+  </main>
+
+  <script>
+    // Toggle display of a pre block
+    function toggle(id){
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.hidden = !el.hidden;
+      // smooth scroll into view when opening
+      if(!el.hidden) el.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+
+    // Copy the textContent of a section and give quick feedback
+    async function copySection(id){
+      const el = document.getElementById(id);
+      if(!el) return;
+      const text = el.textContent.trim();
+      try {
+        await navigator.clipboard.writeText(text);
+        showCopied(id);
+      } catch (e) {
+        // fallback for older browsers
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showCopied(id);
+      }
+    }
+
+    // Visual feedback
+    function showCopied(id){
+      const btn = event?.target || document.querySelector('button');
+      const msg = document.createElement('span');
+      msg.className = 'copied';
+      msg.textContent = 'Copied ✓';
+      // attach near the button briefly
+      btn.parentNode.appendChild(msg);
+      setTimeout(()=> msg.remove(),1500);
+    }
+
+    // Optionally expand all sections on Ctrl+E
+    document.addEventListener('keydown', (ev)=>{
+      if(ev.ctrlKey && ev.key.toLowerCase()==='e'){ ev.preventDefault(); document.querySelectorAll('pre').forEach(p => p.hidden = false); }
+    });
+  </script>
+</body>
+</html>
